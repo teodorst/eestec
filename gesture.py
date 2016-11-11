@@ -27,6 +27,7 @@ upper_range = np.array([30, 255, 255], dtype=np.uint8)
 
 while(cap.isOpened()):
     ret, img = cap.read()
+<<<<<<< HEAD
     # cv2.rectangle(img,(300,300),(100,100),(0,255,0),0)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -52,4 +53,4 @@ while(cap.isOpened()):
     k = cv2.waitKey(10)
     if k == 27:
         break
-    
+
