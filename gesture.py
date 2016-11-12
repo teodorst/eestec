@@ -2,22 +2,46 @@ import cv2
 import numpy as np
 import math
 
+
+
 cap = cv2.VideoCapture(0)
-red = ([170, 160, 60], [180, 255, 255])
 
 
-lower = np.array([0, 70, 0])
-upper = np.array([10, 255, 255])
 
-lower_red_1 = np.array([0, 70, 50])
-upper_red_1 = np.array([10,255,255])
+def angle_cos(p0, p1, p2):
+    d1, d2 = (p0-p1).astype('float'), (p2-p1).astype('float')
+    return abs( np.dot(d1, d2) / np.sqrt( np.dot(d1, d1)*np.dot(d2, d2) ) )
 
-lower_red_2 = np.array([170,70,50])
-upper_red_2 = np.array([180,255,255])
+def find_squares(img):
+    squares = []
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# red
-# lower_range = np.array([169, 100, 100], dtype=np.uint8)
-# upper_range = np.array([189, 255, 255], dtype=np.uint8)
+    gaussian = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    temp,bin = cv2.threshold(gaussian, 80, 255, cv2.THRESH_BINARY)
+
+    contours, hierarchy = cv2.findContours(bin, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+
+    cv2.drawContours( gray, contours, -1, (0, 255, 0), 3 )
+
+    for cnt in contours:
+        cnt_len = cv2.arcLength(cnt, True)
+        cnt = cv2.approxPolyDP(cnt, 0.02 * cnt_len, True)
+
+        if cv2.contourArea(cnt) > 500 and len(cnt) >= 4:
+            squares.append(cnt)
+    return squares
+
+
+
+# def find_result_shape(shapes):
+# 	x_min, y_min = (640, 480)
+# 	x_max, y_max = (0, 0)
+# 	for shape in shapes:
+# 		# coords = np.nditer(shape, flags=['external_loop'])
+# 		for x in range(0, len(coords), 2):
+			
+# 			print x
 
 
 # yellow
@@ -25,32 +49,42 @@ lower_range = np.array([14, 135, 139], dtype=np.uint8)
 upper_range = np.array([30, 255, 255], dtype=np.uint8)
 
 
+
 while(cap.isOpened()):
     ret, img = cap.read()
-<<<<<<< HEAD
     # cv2.rectangle(img,(300,300),(100,100),(0,255,0),0)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    mask1 = cv2.inRange(img, lower_red_1, upper_red_1)
-    mask2 = cv2.inRange(img, lower_red_2, upper_red_2)
-    mask3 = cv2.inRange(img, lower, upper)
-    mask4 = cv2.inRange(img, lower_range, upper_range)
-
-    mask = mask1 + mask2
-
-    img = cv2.bitwise_and(img, img, mask = mask1)
+    mask = cv2.inRange(img, lower_range, upper_range)
+    img = cv2.bitwise_and(img, img, mask = mask)
+    sq = find_squares(img)
+    print len(sq)
     
-    # with open('img.txt', 'w') as f:
-    # 	f.write(img)
+    cv2.drawContours( img, sq, -1, (0, 255, 0), 3 )
+    
+    print 'sqsqsq'
+    print sq
+    if len(sq) > 1:
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        print 'panica'
+        sq = [sq[0]]
 
-    # with open('mask.txt', 'w') as f:
-    # 	f.write(mask)
+    cv2.imshow('Img', img)
     
-    # break;
-    
-    cv2.imshow('Img', mask4)
 
     k = cv2.waitKey(10)
     if k == 27:
         break
-
