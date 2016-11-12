@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import math
-
+from communicator import Communicator
 
 
 cap = cv2.VideoCapture(0)
@@ -67,18 +67,18 @@ while(cap.isOpened()):
     mask = cv2.inRange(img, lower_range, upper_range)
     img = cv2.bitwise_and(img, img, mask = mask)
     sq, click = find_squares(img)
-    
-    M = cv2.moments(sq[0])
-    cx = int(M['m10']/M['m00'])
-    cy = int(M['m01']/M['m00'])
-    if click:
-        com.send_message([cx, cy, 1])
-    else:
-        com.send_message([cx, cy, 1])
+    if sq:
+        M = cv2.moments(sq[0])
+        cx = int(M['m10']/M['m00'])
+        cy = int(M['m01']/M['m00'])
+        if click:
+            com.send_message([cx, cy, 1])
+        else:
+            com.send_message([cx, cy, 1])
 
-    cv2.drawContours( img, sq, -1, (0, 255, 0), 3 )
+        cv2.drawContours( img, sq, -1, (0, 255, 0), 3 )
     
-    print 'Clicked ? %r' % click
+        print 'Clicked ? %r' % click
     # print sq
     
 

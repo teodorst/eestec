@@ -4,6 +4,8 @@ class Communicator:
     def __init__(self, host="localhost", port=1000):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.connect((host,port))
+        name = "HumanAPI"
+        self.s.send(name.encode() + b'\x00')
 
     def send_message(self, message):
         [X, Y, S] = message
