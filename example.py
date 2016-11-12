@@ -70,7 +70,7 @@ while(cap.isOpened()):
 
     cv2.imshow('circle', img)
 
-
+    
     #cv2.imshow('Img', mask4)
     k = cv2.waitKey(10)
     if k == 27:
