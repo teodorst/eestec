@@ -1,5 +1,4 @@
 #!/usr/bin/env python3.4
-
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
@@ -12,6 +11,7 @@ from annimations import CountdownAnimation, DisplayWinners
 from winner import WINNER_LEFT, WINNER_NOBODY, WINNER_RIGHT
 from pingpong import PingPong
 from clickthedisks import ClickTheDisks
+from followthecircle import FollowTheCircle
 
 SOCKET_SERVER_HOST = "localhost"
 SOCKET_SERVER_PORT = 10000
@@ -174,9 +174,9 @@ class GameSequencer(threading.Thread):
 
   def run(self):
     sequence = [
-        PingPong, ClickTheDisks,
-        PingPong, ClickTheDisks,
-        PingPong, ClickTheDisks,
+        PingPong, ClickTheDisks, FollowTheCircle,
+        PingPong, ClickTheDisks, FollowTheCircle,
+        PingPong, ClickTheDisks, FollowTheCircle,
     ]
     for gameClass in sequence:
       self.gameServer.playAnnimation(CountdownAnimation())
