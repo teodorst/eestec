@@ -45,9 +45,9 @@ def find_squares(img):
             M = cv2.moments(cnt)
             cx = int(M['m10']/M['m00'])
             cy = int(M['m01']/M['m00'])
-            com.send_message([cx, cy, 0])
             squares.append(cnt)
         if x != 0 or y != 0:
+            com.send_message([x, y, 0])
             cv2.circle(img,(x,y), int(abs(area / 100)), (0,0,255), -1)
             print("x=" + str(x) + " y=" + str(y))
     return squares
