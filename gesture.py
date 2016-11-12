@@ -24,13 +24,21 @@ def find_squares(img):
 
     cv2.drawContours( gray, contours, -1, (0, 255, 0), 3 )
 
+    max_area = 0
     for cnt in contours:
         cnt_len = cv2.arcLength(cnt, True)
         cnt = cv2.approxPolyDP(cnt, 0.02 * cnt_len, True)
+        area = cv2.contourArea(cnt)
 
-        if cv2.contourArea(cnt) > 500 and len(cnt) >= 4:
+        if area > 500 and len(cnt) >= 4:
             squares.append(cnt)
-    return squares
+            if area > 5000 and area > max_area:
+                max_area = area
+
+
+    if len(squares) > 1:
+        squares = [squares[0]]
+    return (squares, max_area > 0)
 
 
 
@@ -57,30 +65,13 @@ while(cap.isOpened()):
 
     mask = cv2.inRange(img, lower_range, upper_range)
     img = cv2.bitwise_and(img, img, mask = mask)
-    sq = find_squares(img)
-    print len(sq)
+    sq, click = find_squares(img)
     
     cv2.drawContours( img, sq, -1, (0, 255, 0), 3 )
     
-    print 'sqsqsq'
-    print sq
-    if len(sq) > 1:
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        print 'panica'
-        sq = [sq[0]]
+    print 'Clicked ? %r' % click
+    # print sq
+    
 
     cv2.imshow('Img', img)
     
