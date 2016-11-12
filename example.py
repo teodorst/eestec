@@ -40,16 +40,19 @@ def find_squares(img):
         approx = cv2.approxPolyDP(cnt,0.01*cv2.arcLength(cnt,True),True)
         cnt = cv2.approxPolyDP(cnt, 0.02 * cnt_len, True)
         area = cv2.contourArea(cnt)
-        if area > 70 and area > max_area and len(cnt) >= 4:
+        if area > 100 and area > max_area and len(cnt) >= 4:
             max_area = area
             M = cv2.moments(cnt)
             cx = int(M['m10']/M['m00'])
             cy = int(M['m01']/M['m00'])
             squares.append(cnt)
-        if x != 0 or y != 0:
-            com.send_message([x, y, 0])
-            cv2.circle(img,(x,y), int(abs(area / 100)), (0,0,255), -1)
-            print("x=" + str(x) + " y=" + str(y))
+            S = 1 if area > 5000 else 0
+            com.send_message([cx, cy, S])
+            print(str(area))
+
+        #if x != 0 or y != 0:
+            #cv2.circle(img,(x,y), int(abs(area / 100)), (0,0,255), -1)
+            #print("x=" + str(x) + " y=" + str(y))
     return squares
 
 
@@ -68,7 +71,7 @@ while(cap.isOpened()):
     cv2.drawContours( mask, squares, -1, (0, 255, 0), 3 )
     cv2.imshow('squares', mask)
 
-    cv2.imshow('circle', img)
+    #cv2.imshow('circle', img)
 
 
     #cv2.imshow('Img', mask4)
